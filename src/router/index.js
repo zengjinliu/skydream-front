@@ -3,6 +3,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from "../pages/login/Login";
 import Home from "../pages/home/Home";
+import HomeIndex from "../pages/home/HomeIndex"
 
 //声明使用插件
 Vue.use(VueRouter)
@@ -18,7 +19,12 @@ const routes = [
   },
   {
     path:'/home',
-    component: Home
+    component: Home,
+  },
+  {
+    path:'/index',
+    component: HomeIndex,
+    name:'homeIndex'
   }
 ]
 

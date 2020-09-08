@@ -72,7 +72,7 @@
                 this.$router.replace('/home');
               } else {
                 this.requireCaptcha();
-                this.$router.replace('/httpRequest')
+                this.$message.error(res.msg);
               }
             })
           }

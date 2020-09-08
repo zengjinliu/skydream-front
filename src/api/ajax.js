@@ -19,7 +19,6 @@ export const url ='http://localhost:8081/skydream'
  */
 axios.interceptors.request.use(config => {
   config.headers['token'] = Vue.cookie.get('token') // 请求头带上token
-  console.log(Vue.cookie.get('token'));
   return config
 }, error => {
   return Promise.reject(error)
