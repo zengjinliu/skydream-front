@@ -69,6 +69,8 @@
             httpRequest(this.user.username,this.user.password,this.user.captcha,this.user.uuid).then(res => {
               if (res.code === 200) {
                 this.$cookie.set('token',res.datas);
+                let user = {username:this.user.username,id:this.user.uuid};
+                this.$store.dispatch('saveUserInfo',user)
                 this.$router.replace('/home');
               } else {
                 this.requireCaptcha();
@@ -81,7 +83,6 @@
       requireCaptcha(){
         //请求验证码
         this.user.uuid= getUUID();
-
         this.captchaPath = getCaptchaPath(this.user.uuid);
       }
     }

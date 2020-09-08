@@ -12,27 +12,65 @@
             </span>
           </div>
         </template>
-        <el-menu-item index="1-1">修改密码</el-menu-item>
-        <el-menu-item index="1-2">退出</el-menu-item>
+        <el-menu-item index="1-1" @click.native="modifyPassword()">修改密码</el-menu-item>
+        <el-menu-item index="1-2" @click.native="logout()">退出</el-menu-item>
       </el-submenu>
     </el-menu>
+    <!--修改密码-->
+    <update-password v-if="visiable" ref="updatePassword"></update-password>
   </div>
 
 </template>
 
 <script>
 
+  import updatePassword from './UpdatePassowrd'
+
+  import {logout} from "../../api/home";
+  import {clearLoginInfo} from "../../api/ajax"
+
 
   export default {
     name: "Header",
     data() {
       return {
-        userName: 'zhangsan'
+        userName: '',
+        visiable: false
       };
+    },
+    components: {
+      updatePassword,
+    },
+    created(){
+      this.userName=this.$store.state.user.username;
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      logout() {
+        //退出登录
+        this.$confirm('确定进行退出操作?', '提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        }).then(res =>{
+          logout().then((data) =>{
+            if(data.code ===200){
+              clearLoginInfo()
+              this.$router.replace("/login");
+            }
+          })
+        }).catch(() =>{
+        })
+      },
+      modifyPassword(){
+        //修改密码
+        this.visiable = true;
+        this.$nextTick(() =>{
+          //dom异步更新
+          this.$refs.updatePassword.init();
+        })
+
       }
     }
 
@@ -66,7 +104,8 @@
     color: #606266;
     font-size: 14px;
   }
-  .user-info img{
+
+  .user-info img {
     width: 36px;
     height: auto;
     margin-right: 5px;
