@@ -3,7 +3,7 @@
 */
 
 import ajax from "./ajax";
-import {url} from "./ajax";
+
 
 
 
@@ -17,9 +17,8 @@ export function getUUID () {
 }
 
 //1：登录
-export const httpRequest = (username, password, captcha, uuid) =>ajax(url+"/login",{username,password,captcha,uuid},'POST')
+export const httpRequest = (params) =>ajax('/login',params,'POST')
 //2：请求验证码
-export function getCaptchaPath(uuid) {
-  return  url + "/captcha?uuid=" + uuid;
-}
+export const getCaptchaPath = (uuid) =>ajax('/captcha',{uuid})
+
 

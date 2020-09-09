@@ -10,9 +10,15 @@ import axios from 'axios'
 import Vue from 'vue'
 import VueRouter from '../router'
 
+axios.defaults.timeout=5000;//超时时间
+axios.defaults.withCredentials=true;//允许跨域
+axios.defaults.headers.post['Content-type']='application/x-www-form-urlencoded;charser=UTF-8';
+axios.defaults.baseURL='http://localhost:8081/skydream'
 
-//请求地址
-export const url ='http://localhost:8081/skydream'
+
+
+
+
 
 /**
  * 请求拦截

@@ -66,7 +66,7 @@
         //登录
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
-            httpRequest(this.user.username,this.user.password,this.user.captcha,this.user.uuid).then(res => {
+            httpRequest(this.user).then(res => {
               if (res.code === 200) {
                 this.$cookie.set('token',res.datas);
                 let user = {username:this.user.username,id:this.user.uuid};
