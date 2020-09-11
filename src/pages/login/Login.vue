@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import {httpRequest,getCaptchaPath,getUUID} from "../../api/login";
+  import {doLogin,getCaptchaPath,getUUID} from "../../api/login";
 
   export default {
     name: "Login",
@@ -66,12 +66,12 @@
         //登录
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
-            httpRequest(this.user).then(res => {
+            doLogin(this.user).then(res => {
               if (res.code === 200) {
                 this.$cookie.set('token',res.datas);
                 let user = {username:this.user.username,id:this.user.uuid};
                 this.$store.dispatch('saveUserInfo',user)
-                this.$router.replace('/home');
+                this.$router.replace('/info');
               } else {
                 this.requireCaptcha();
                 this.$message.error(res.msg);

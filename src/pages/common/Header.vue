@@ -1,115 +1,166 @@
 <template>
   <div class="header">
-    <el-menu
-      class="el-menu-demo"
-      mode="horizontal"
-      @select="handleSelect">
-      <el-submenu index="1">
-        <template slot="title">
-          <div class="user-info">
-            <span>
-              <img src="../../assert/img/jay.png" :alt="userName">{{userName}}
-            </span>
-          </div>
-        </template>
-        <el-menu-item index="1-1" @click.native="modifyPassword()">修改密码</el-menu-item>
-        <el-menu-item index="1-2" @click.native="logout()">退出</el-menu-item>
-      </el-submenu>
-    </el-menu>
-    <!--修改密码-->
-    <update-password v-if="visiable" ref="updatePassword"></update-password>
+    <!--标题-->
+    <div class="logo">智能调度平台</div>
+    <div class="tools">
+      <div class="collapse-btn" @click="handleCollapse">
+        <i class="el-icon-menu"></i>
+      </div>
+      <div class="fullscreen-btn" @click="handleFullScreen">
+        <el-tooltip :content="fullScreen?`取消全屏`:`全屏`" placement="bottom">
+          <i class="el-icon-rank"></i>
+        </el-tooltip>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avator">
+        <img src="../../assert/img/jay.png">
+      </div>
+      <el-dropdown class="user-name">
+        <span class="el-dropdown-link">
+          {{username}}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>修改密码</el-dropdown-item>
+          <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
   </div>
-
 </template>
 
 <script>
-
-  import updatePassword from './UpdatePassowrd'
-
-  import {logout} from "../../api/home";
-  import {clearLoginInfo} from "../../api/ajax"
-
+  import {doLogout} from "../../api/login";
+  import {clearLoginInfo} from "../../api/ajax";
 
   export default {
     name: "Header",
     data() {
       return {
-        userName: '',
-        visiable: false
-      };
+        collapse: false,
+        fullScreen: false
+      }
+
     },
-    components: {
-      updatePassword,
+    created() {
+      //通过Bus进行组件之间的通讯
+
     },
-    created(){
-      this.userName=this.$store.state.user.username;
+    computed: {
+      username() {
+        return this.$store.state.user.username;
+      }
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+      //点击全屏处理(浏览器兼容处理)
+      handleFullScreen() {
+        let element = document.documentElement;
+        if (this.fullScreen) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        } else {
+          if (element.requestFullscreen) {
+            element.requestFullscreen();
+          } else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+          } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+          } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+          }
+        }
+        this.fullScreen = !this.fullScreen;
       },
+      //点击收缩菜单按钮
+      handleCollapse() {
+        //发出事件,让侧边栏收到讯息
+        this.collapse = !this.collapse;
+        this.$bus.$emit('collapse', this.collapse);
+      },
+      //退出登录
       logout() {
-        //退出登录
-        this.$confirm('确定进行退出操作?', '提示',{
-          confirmButtonText: '确定',
-          cancelButtonText: '取消'
-        }).then(res =>{
-          logout().then((data) =>{
-            if(data.code ===200){
-              clearLoginInfo()
-              this.$router.replace("/login");
-            }
-          })
-        }).catch(() =>{
-        })
-      },
-      modifyPassword(){
-        //修改密码
-        this.visiable = true;
-        this.$nextTick(() =>{
-          //dom异步更新
-          this.$refs.updatePassword.init();
-        })
-
+        doLogout();
+        //清除cookie信息
+        clearLoginInfo();
       }
     }
-
   }
 </script>
 
 <style scoped>
   .header {
-    border-bottom: 1px solid #f6f6f6;
+    position: relative;
+    background-color: #253041;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0);
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 50px;
-    display: block;
-    z-index: 1000px;
+    font-size: 22px;
+    color: #ffffff;
   }
 
-  .el-menu-demo {
-    margin-top: -10px;
-    margin-left: 220px;
-    width: 18%;
-    margin-left: 1100px;
+  .collapse-btn {
+    float: left;
+    padding: 0 21px;
+    cursor: pointer;
+    line-height: 50px;
   }
 
-  .user-info {
-    display: inline-block;
+  .header .logo {
     position: relative;
-    color: #606266;
-    font-size: 14px;
+    float: left;
+    line-height: 50px;
+    left: 20px;
   }
 
-  .user-info img {
-    width: 36px;
-    height: auto;
+  .tools {
+    float: left;
+    display: flex;
+    height: 50px;
+    align-items: center;
+    margin-left: 70px;
+  }
+
+  .fullscreen-btn {
+    transform: rotate(45deg);
     margin-right: 5px;
-    border-radius: 100%;
-    vertical-align: middle;
+    font-size: 30px;
+
+  }
+
+  .header-right {
+    float: right;
+    padding-right: 50px;
+    display: flex;
+    height: 50px;
+    align-items: center;
+  }
+
+  .user-avator {
+    margin: 10px;
+
+  }
+
+  .user-avator img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .el-dropdown-link {
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .el-icon-arrow-down {
+    font-size: 12px;
   }
 </style>

@@ -1,0 +1,11 @@
+.content-box{
+  position: absolute;
+  left: 200px;
+  right: 0;
+  top: 50px;
+  bottom: 0;
+  overflow-y: scroll;
+  -webkit-transition: left .3s ease-in-out;
+  transition: left .3s ease-in-out;
+  background-color: #f0f0f0;
+}

@@ -10,15 +10,10 @@ import axios from 'axios'
 import Vue from 'vue'
 import VueRouter from '../router'
 
-axios.defaults.timeout=5000;//超时时间
-axios.defaults.withCredentials=true;//允许跨域
-axios.defaults.headers.post['Content-type']='application/x-www-form-urlencoded;charser=UTF-8';
-axios.defaults.baseURL='http://localhost:8081/skydream'
-
-
-
-
-
+//请求地址
+export const url = 'http://localhost:8081/skydream';
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://localhost:8081/skydream';
 
 /**
  * 请求拦截
@@ -36,7 +31,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   if (response.data && response.data.code === 401) { // 401, token失效
     clearLoginInfo()
-    VueRouter.push({ path: '/login' })
+    VueRouter.push({path: '/login'})
   }
   return response
 }, error => {
@@ -45,7 +40,7 @@ axios.interceptors.response.use(response => {
 
 export default function ajax(url, data = {}, type = 'GET') {
   /*高阶函数*/
-  return new Promise(function (resolve,reject) {
+  return new Promise(function (resolve, reject) {
     let promise
     if (type === "GET") {
       //准备url query参数数据
@@ -68,15 +63,16 @@ export default function ajax(url, data = {}, type = 'GET') {
     promise.then(response => {
       resolve(response.data)
     }).catch(error => {
-        //失败了调用reject
-        reject(error);
-     })
+      //失败了调用reject
+      reject(error);
+    })
   });
 }
+
 /**
  * 清除登录信息
  */
-export function clearLoginInfo () {
+export function clearLoginInfo() {
   Vue.cookie.delete('token')
 }
 
