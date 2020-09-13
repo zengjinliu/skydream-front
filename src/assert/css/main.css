@@ -9,3 +9,6 @@
   transition: left .3s ease-in-out;
   background-color: #f0f0f0;
 }
+.content-collapse{
+  left: 65px;
+}

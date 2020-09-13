@@ -22,15 +22,19 @@
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>修改密码</el-dropdown-item>
+          <el-dropdown-item @click.native="handleModifyPwd">修改密码</el-dropdown-item>
           <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <update-password v-if="modifyPwd" ref="updatePwd"></update-password>
   </div>
+
 </template>
 
 <script>
+  import UpdatePassword from "./UpdatePassword";
+
   import {doLogout} from "../../api/login";
   import {clearLoginInfo} from "../../api/ajax";
 
@@ -39,13 +43,17 @@
     data() {
       return {
         collapse: false,
-        fullScreen: false
+        fullScreen: false,
+        modifyPwd: false
       }
 
     },
     created() {
       //通过Bus进行组件之间的通讯
-
+      this.$bus.$emit('collapse',this.collapse);
+    },
+    components:{
+      UpdatePassword,
     },
     computed: {
       username() {
@@ -87,9 +95,22 @@
       },
       //退出登录
       logout() {
-        doLogout();
-        //清除cookie信息
-        clearLoginInfo();
+        this.$confirm(`确定进行[退出]操作`,'提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          doLogout();
+          //清除cookie信息
+          clearLoginInfo();
+        })
+      },
+      //修改密码
+      handleModifyPwd(){
+        this.modifyPwd = true;
+        this.$nextTick(() => {
+          this.$refs.updatePwd.init()
+        })
       }
     }
   }

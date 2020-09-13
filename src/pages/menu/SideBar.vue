@@ -6,12 +6,19 @@
       :collapse="collapse"
       background-color="#334256"
       text-color="#ffffff"
-      active-text-color="#20a0ff">
+      active-text-color="#20a0ff"
+      router
+    >
       <el-menu-item index="info" @click="$router.push('/info')">
         <i class="el-icon-house"></i>
         <span slot="title">首页</span>
       </el-menu-item>
-      <nav-menu :navMenus="items"></nav-menu>
+      <nav-menu
+        v-for="menu in items"
+        :key="menu.menuId"
+        :menu="menu"
+        >
+      </nav-menu>
     </el-menu>
   </div>
 </template>
@@ -42,11 +49,9 @@
       //事件总线与其他组件之间的通讯
       this.$bus.$on('collapse', msg => {
         this.collapse = msg;
-        console.log(msg);
       });
       //请求菜单
       this.requireItems();
-
     },
     methods: {
       requireItems() {

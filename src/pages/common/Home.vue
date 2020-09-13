@@ -2,7 +2,7 @@
   <div>
     <v-header></v-header>
     <side-bar></side-bar>
-    <div class="content-box">
+    <div class="content-box" :class="{'content-collapse':collapse}">
       <router-view></router-view>
     </div>
   </div>
@@ -10,14 +10,24 @@
 
 <script>
   import vHeader from "./Header";
-  import SideBar from "./SideBar";
+  import SideBar from "../menu/SideBar";
 
   export default {
     name: "Home",
+    data(){
+      return {
+        collapse: false
+      }
+    },
 
     components: {
       vHeader,
       SideBar
+    },
+    created() {
+      this.$bus.$on('collapse', msg => {
+        this.collapse = msg;
+      });
     }
   }
 </script>
