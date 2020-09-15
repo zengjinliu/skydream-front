@@ -6,7 +6,7 @@
 
     <el-form ref="roleForm" :model="roleForm"
              :rules="roleFormRule" label-width="80px"
-             @keyup.enter.native="doAddUser">
+             @keyup.enter.native="doAddRole">
 
       <el-form-item label="角色名称" prop="roleName">
         <el-input v-model="roleForm.roleName"></el-input>
@@ -30,7 +30,7 @@
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogShow = false">取 消</el-button>
-      <el-button type="primary" @click="doAddUser">确 定</el-button>
+      <el-button type="primary" @click="doAddRole">确 定</el-button>
     </div>
 
   </el-dialog>
@@ -78,13 +78,13 @@
         this.dialogShow = true;
         this.roleForm.roleId = roleId;
       },
-      doAddUser(){
+      doAddRole(){
         //获取选中的节点信息
-        this.roleForm = this.$refs.menuTree.getCheckedKeys()
+        this.roleForm.menuIds = this.$refs.menuTree.getCheckedKeys()
         addRole(this.roleForm).then(res =>{
           if(res.code===200){
             this.dialogShow = false;
-            this.$emit('refreshList')
+            this.$bus.$emit('refreshList')
             this.$message.success('添加成功');
           }
         })

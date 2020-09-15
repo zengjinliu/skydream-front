@@ -99,7 +99,7 @@
               this.userForm.confirmPwd = res.datas.password;
               this.userForm.pic = res.datas.pic;
               this.userForm.phone = res.datas.phone;
-              this.$emit('refreshList');
+              this.$bus.$emit('refreshList');
             }
           })
         }
