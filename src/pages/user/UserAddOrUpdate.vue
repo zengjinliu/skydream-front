@@ -1,24 +1,136 @@
 <template>
-  <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+  <el-dialog :title="userForm.userId?`修改用户`:`新增用户`"
+             :visible.sync="dialogFormVisible"
+             :close-on-click-modal="false"
+             :append-to-body="true">
 
+    <el-form ref="userForm" :model="userForm"
+             :rules="userFormRule" label-width="80px"
+             @keyup.enter.native="doAddUser">
+
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="userForm.username"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="userForm.password" type="password"></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码" prop="confirmPwd">
+        <el-input v-model="userForm.confirmPwd" type="password"></el-input>
+      </el-form-item>
+      <el-form-item label="电话" prop="phone">
+        <el-input v-model="userForm.phone"></el-input>
+      </el-form-item>
+      <el-form-item label="头像" prop="pic">
+        <el-input v-model="userForm.pic"></el-input>
+      </el-form-item>
+      <el-form-item label="角色" prop="role">
+        <el-input v-model="userForm.role"></el-input>
+      </el-form-item>
+    </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      <el-button type="primary" @click="doAddUser">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
+  import {checkNameExist,add,update,queryUserById} from "../../api/user";
+
   export default {
     name: "UserAddOrUpdate",
-    data(){
+    data() {
+      let checkName = (rule, value, callback) => {
+        checkNameExist(value).then(res=>{
+          if(res.datas){
+            callback(new Error('该用户名已存在'));
+          }else{
+            callback();
+          }
+        })
+      };
+      let checkPwd = (rule,value,callback) =>{
+        if(this.userForm.password!=value){
+          callback(new Error('2次输入密码不一致'))
+        }else {
+          callback();
+        }
+      };
       return {
         dialogFormVisible: false,
+        userForm: {
+          username: '',
+          password: '',
+          confirmPwd: '',
+          phone: '',
+          pic: '',
+          role:'',
+          userId:''
+        },
+        userFormRule: {
+          username: [
+            {required: true, message: '用户名不能为空', trigger: 'blur'},
+            {validator: checkName, trigger: 'blur'}
+          ],
+          password: [
+            {required: true, message: '密码不能为空', trigger: 'blur'}
+          ],
+          confirmPwd: [
+            {required: true, message: '确认密码不能为空', trigger: 'blur'},
+            {validator: checkPwd, trigger: 'blur'},
+          ],
+          phone:[
+            {required: true,message:'电话不能为空',trigger:'blur'}
+          ]
+        },
       }
     },
-    methods:{
-      init(){
+    methods: {
+      init(userId) {
+        //初始化
         this.dialogFormVisible = true;
+        this.userForm.userId = userId;
+        if(userId!=undefined){
+          //数据回显
+          queryUserById(userId).then(res =>{
+            if(res.code===200){
+              this.userForm.username = res.datas.username;
+              this.userForm.password = res.datas.password;
+              this.userForm.confirmPwd = res.datas.password;
+              this.userForm.pic = res.datas.pic;
+              this.userForm.phone = res.datas.phone;
+              this.$emit('refreshList');
+            }
+          })
+        }
+      },
+      doAddUser(){
+        if(this.userForm.userId){
+          //修改
+          update(this.userForm).then(res =>{
+            if(res.code===200){
+              this.dialogFormVisible = false;
+              this.$emit('refreshList');
+              this.$message.success('修改成功')
+            }else{
+              this.dialogFormVisible = true;
+              this.$message.error('修改失败')
+            }
+          })
+        }else{
+          //新增
+          add(this.userForm).then(res=>{
+            if(res.code===200){
+              this.dialogFormVisible = false;
+              this.$message.success('添加成功');
+              //刷新列表
+              this.$emit('refreshList')
+            }else{
+              this.dialogFormVisible = true;
+              this.$message.error('添加失败')
+            }
+          })
+        }
       }
     }
   }
