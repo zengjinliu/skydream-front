@@ -23,5 +23,8 @@ export function getCaptchaPath(uuid) {
 //退出登录
 export const doLogout = () => ajax(`/logout`);
 
+//修改密码
+export const updatePwd = (params) => ajax(`/user/updatePwd`,params,'POST')
+
 
 

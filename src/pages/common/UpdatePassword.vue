@@ -2,6 +2,7 @@
   <el-dialog
     title="修改密码"
     :visible.sync="visible"
+    :close-on-click-modal="false"
     :append-to-body="true">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit"
              label-width="80px">
@@ -9,10 +10,10 @@
         <span>{{ username }}</span>
       </el-form-item>
       <el-form-item label="原密码" prop="password">
-        <el-input type="password" v-model="dataForm.password"></el-input>
+        <el-input type="password" v-model="dataForm.pwd"></el-input>
       </el-form-item>
       <el-form-item label="新密码" prop="newPassword">
-        <el-input type="password" v-model="dataForm.newPassword"></el-input>
+        <el-input type="password" v-model="dataForm.npwd"></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="confirmPassword">
         <el-input type="password" v-model="dataForm.confirmPassword"></el-input>
@@ -26,11 +27,16 @@
 </template>
 
 <script>
+
+  import {updatePwd} from "../../api/login";
+  import {clearLoginInfo} from "../../api/ajax";
+  import {doLogout} from "../../api/login";
+
   export default {
     name: "UpdatePassword",
     data () {
       var validateConfirmPassword = (rule, value, callback) => {
-        if (this.dataForm.newPassword !== value) {
+        if (this.dataForm.npwd !== value) {
           callback(new Error('确认密码与新密码不一致'))
         } else {
           callback()
@@ -39,15 +45,15 @@
       return {
         visible: false,
         dataForm: {
-          password: '',
-          newPassword: '',
+          pwd: '',
+          npwd: '',
           confirmPassword: ''
         },
         dataRule: {
-          password: [
+          pwd: [
             { required: true, message: '原密码不能为空', trigger: 'blur' }
           ],
-          newPassword: [
+          npwd: [
             { required: true, message: '新密码不能为空', trigger: 'blur' }
           ],
           confirmPassword: [
@@ -72,6 +78,17 @@
       },
       dataFormSubmit(){
 
+        this.$refs['dataForm'].validate((valid) =>{
+          if(valid){
+            updatePwd(this.dataForm).then(res =>{
+              //更新密码成功后，清楚浏览信息，并重新登录
+              if(res.code ===200){
+                doLogout();
+                clearLoginInfo()
+              }
+            }).catch(()=>{});
+          }
+        })
       }
     }
   }
