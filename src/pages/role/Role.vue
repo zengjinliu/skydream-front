@@ -3,7 +3,7 @@
     <div class="search-form">
       <el-form :model="roleForm" :inline="true" ref="roleForm"  label-width="100px" class="demo-form-inline">
         <el-form-item label="角色名称" prop="username">
-          <el-input v-model="roleForm.username"></el-input>
+          <el-input v-model="roleForm.roleName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="doSearch">查询</el-button>
@@ -57,7 +57,7 @@
 <script>
   import RoleAddOrUpdate from "./RoleAddOrUpdate";
 
-  import {getRolePage} from "../../api/role";
+  import {getRolePage,delRole} from "../../api/role";
 
   export default {
     name: "Role",
@@ -100,28 +100,28 @@
         //事实监听选中的数据项
         this.roleIds = val;
       },
-      // del(userId) {
-      //   //类似Java中的map方法
-      //   let userIds = userId ? [userId] : this.userIds.map(item => {
-      //     return item.userId;
-      //   });
-      //   //删除单个用户
-      //   this.$confirm('确定进行删除操作,是否继续？', '提示', {
-      //     confirmButtonText: '确定',
-      //     cancelButtonText: '取消',
-      //     type: 'warning'
-      //   }).then(() => {
-      //     delUser(userIds).then(res => {
-      //       if (res.code === 200) {
-      //         this.$message.success('删除成功');
-      //         this.page();
-      //       }
-      //     }).catch(err => {
-      //       this.$message.error(err);
-      //     });
-      //   }).catch(() => {
-      //   });
-      // },
+      del(roleId) {
+        //类似Java中的map方法
+        let roleIds = roleId ? [roleId] : this.roleIds.map(item => {
+          return item.roleId;
+        });
+        //删除角色
+        this.$confirm('确定进行删除操作,是否继续？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          delRole(roleIds).then(res => {
+            if (res.code === 200) {
+              this.$message.success('删除成功');
+              this.page();
+            }
+          }).catch(err => {
+            this.$message.error(err);
+          });
+        }).catch(() => {
+        });
+      },
       doSearch() {
         //条件搜索
         this.page();

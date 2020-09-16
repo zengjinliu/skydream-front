@@ -89,8 +89,8 @@
       init(userId) {
         //初始化
         this.dialogFormVisible = true;
-        this.userForm.userId = userId;
         if(userId!=undefined){
+          this.userForm.userId = userId;
           //数据回显
           queryUserById(userId).then(res =>{
             if(res.code===200){
@@ -99,35 +99,46 @@
               this.userForm.confirmPwd = res.datas.password;
               this.userForm.pic = res.datas.pic;
               this.userForm.phone = res.datas.phone;
-              this.$bus.$emit('refreshList');
             }
+          })
+        }else {
+          this.$nextTick(()=>{
+            this.$refs['userForm'].resetFields();
           })
         }
       },
       doAddUser(){
         if(this.userForm.userId){
           //修改
-          update(this.userForm).then(res =>{
-            if(res.code===200){
-              this.dialogFormVisible = false;
-              this.$emit('refreshList');
-              this.$message.success('修改成功')
-            }else{
-              this.dialogFormVisible = true;
-              this.$message.error('修改失败')
+          this.$refs['userForm'].validate((valid) =>{
+            if(valid){
+              update(this.userForm).then(res =>{
+                if(res.code===200){
+                  this.dialogFormVisible = false;
+                  this.$emit('refreshList');
+                  this.$message.success('修改成功')
+                }else{
+                  this.dialogFormVisible = true;
+                  this.$message.error('修改失败')
+                }
+              })
             }
           })
         }else{
           //新增
-          add(this.userForm).then(res=>{
-            if(res.code===200){
-              this.dialogFormVisible = false;
-              this.$message.success('添加成功');
-              //刷新列表
-              this.$emit('refreshList')
-            }else{
-              this.dialogFormVisible = true;
-              this.$message.error('添加失败')
+          this.$refs['userForm'].validate((valid) =>{
+            if(valid){
+              add(this.userForm).then(res=>{
+                if(res.code===200){
+                  this.dialogFormVisible = false;
+                  this.$message.success('添加成功');
+                  //刷新列表
+                  this.$emit('refreshList')
+                }else{
+                  this.dialogFormVisible = true;
+                  this.$message.error('添加失败')
+                }
+              })
             }
           })
         }
