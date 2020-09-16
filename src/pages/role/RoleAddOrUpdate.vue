@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="角色"
+  <el-dialog :title="!roleForm.roleId ? '新增' : '修改'"
              :visible.sync="dialogShow"
              :close-on-click-modal="false"
              :append-to-body="true">
