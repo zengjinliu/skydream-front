@@ -23,8 +23,17 @@
       <el-form-item label="头像" prop="pic">
         <el-input v-model="userForm.pic"></el-input>
       </el-form-item>
-      <el-form-item label="角色" prop="role">
-        <el-input v-model="userForm.role"></el-input>
+      <el-form-item label="角色" prop="roleIds">
+        <el-select v-model="userForm.roleIds" placeholder="请选择"
+                   multiple size="medium" filterable clearable
+        >
+          <el-option
+            v-for="item in roleList"
+            :key="item.roleId"
+            :label="item.roleName"
+            :value="item.roleId">
+          </el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -36,18 +45,23 @@
 
 <script>
   import {checkNameExist,add,update,queryUserById} from "../../api/user";
+  import {getAllRoles} from "../../api/role";
 
   export default {
     name: "UserAddOrUpdate",
     data() {
       let checkName = (rule, value, callback) => {
-        checkNameExist(value).then(res=>{
-          if(res.datas){
-            callback(new Error('该用户名已存在'));
-          }else{
-            callback();
-          }
-        })
+        if(this.userForm.userId){
+          callback();
+        }else{
+          checkNameExist(value).then(res=>{
+            if(res.datas){
+              callback(new Error('该用户名已存在'));
+            }else{
+              callback();
+            }
+          })
+        }
       };
       let checkPwd = (rule,value,callback) =>{
         if(this.userForm.password!=value){
@@ -64,7 +78,7 @@
           confirmPwd: '',
           phone: '',
           pic: '',
-          role:'',
+          roleIds: [],
           userId:''
         },
         userFormRule: {
@@ -83,7 +97,16 @@
             {required: true,message:'电话不能为空',trigger:'blur'}
           ]
         },
+        roleList:[],
       }
+    },
+    created() {
+      //获取所有的角色
+      getAllRoles().then(res => {
+        if(res.code===200){
+          this.roleList = res.datas;
+        }
+      })
     },
     methods: {
       init(userId) {
@@ -148,5 +171,7 @@
 </script>
 
 <style scoped>
-
+.el-select--medium{
+  width: 60%;
+}
 </style>

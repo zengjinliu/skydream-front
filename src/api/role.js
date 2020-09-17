@@ -10,3 +10,5 @@ export const delRole = (param) => ajax(`/role/del`, param, 'POST')
 export const queryById = (roleId) => ajax(`/role/queryById`,{roleId});
 //修改角色
 export const update = (param) => ajax(`/role/update`,param,'POST');
+//获取所有的角色
+export const getAllRoles = () => ajax(`/role/getAllRoles`);

@@ -18,6 +18,7 @@
       <!--树形控件-->
       <el-form-item label="菜单树">
         <el-tree
+          :check-strictly="checkStrictly"
           :data="treeData"
           show-checkbox
           default-expand-all
@@ -41,7 +42,7 @@
 <script>
 
   import {getTreeMenu} from "../../api/menu";
-  import {addRole, queryById,update} from "../../api/role";
+  import {addRole, queryById, update} from "../../api/role";
 
   export default {
     name: "RoleAddOrUpdate",
@@ -53,18 +54,20 @@
           remark: '',
           menuIds: []
         },
-        dialogShow: false,
         roleFormRule: {
           roleName: [
             {required: true, message: '角色名称不能为空', trigger: 'blur'}
           ]
         },
-        treeData: [],
         defaultProps: {
           children: 'childs',
           label: 'name',
           id: 'menuId'
-        }
+        },
+        dialogShow: false,
+        treeData: [],
+        checkStrictly:false,
+
       }
     },
     created() {
@@ -79,42 +82,46 @@
       init(roleId) {
         this.dialogShow = true;
         //修改信息回显
-        if(roleId!=undefined){
+        if (roleId != undefined) {
           this.roleForm.roleId = roleId;
           queryById(roleId).then(res => {
             if (res.code === 200) {
               this.roleForm.roleName = res.datas.roleName;
               this.roleForm.remark = res.datas.remark;
               let that = this;
-              setTimeout(function () {
-                res.datas.menuIds.forEach(e => {
-                  that.$refs.menuTree.setChecked(e, true, false);
-                })
-              }, 500)
-
+              this.checkStrictly = true;
+              this.$nextTick(() => {
+                setTimeout(()=>{
+                  that.$refs.menuTree.setCheckedKeys(res.datas.menuIds);
+                  // res.datas.menuIds.forEach(e => {
+                  //   that.$refs.menuTree.setChecked(e, true, false);
+                  // })
+                  this.checkStrictly = false
+                },10)
+              })
             }
           })
-        } else{
-          this.$nextTick(()=>{
-            this.$refs['roleForm'].resetFields();
-            this.roleForm.remark='';
-            this.$refs.menuTree.setCheckedKeys([])
-          })
+        } else {
+          this.clearData();
         }
       },
       doAddRole() {
         //获取选中的节点信息
-        this.roleForm.menuIds = this.$refs.menuTree.getCheckedKeys()
+        let menuIds = this.$refs.menuTree.getHalfCheckedKeys();
+        this.$refs.menuTree.getCheckedKeys().forEach(e => {
+          menuIds.push(e);
+        });
+        this.roleForm.menuIds = menuIds;
         if (this.roleForm.roleId) {
           //修改
           this.$refs['roleForm'].validate((valid) => {
             if (valid) {
-              update(this.roleForm).then(res =>{
-                if(res.code===200){
+              update(this.roleForm).then(res => {
+                if (res.code === 200) {
                   this.dialogShow = false;
                   this.$message.success('修改成功')
                   this.$emit('refreshList');
-                }else {
+                } else {
                   this.$message.error('修改失败')
                 }
               })
@@ -129,12 +136,21 @@
                   this.dialogShow = false;
                   this.$emit('refreshList')
                   this.$message.success('添加成功');
+                  this.clearData();
                 }
               })
             }
           });
         }
 
+      },
+      clearData(){
+        //TODO 数据回显的问题
+        this.$nextTick(() => {
+          this.$refs['roleForm'].resetFields();
+          this.roleForm.remark = '';
+          this.$refs.menuTree.setCheckedKeys([])
+        })
       }
     }
   }

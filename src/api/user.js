@@ -12,4 +12,6 @@ export const add = (param) => ajax(`/user/add`, param, 'POST');
 //5.修改用户
 export const update = (param) => ajax(`/user/update`, param, 'POST');
 //6.根据主键id查询用户
-export const queryUserById = (userId) => ajax(`/user/queryById`,{userId});
+export const queryUserById = (userId) => ajax(`/user/queryById`, {userId});
+//7.获取当期用户的权限
+export const getAllPerms = () => ajax(`/user/queryAllPerms`);

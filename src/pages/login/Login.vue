@@ -31,6 +31,8 @@
 
 <script>
   import {doLogin,getCaptchaPath,getUUID} from "../../api/login";
+  import {getAllPerms} from "../../api/user";
+  import router from "../../router";
 
   export default {
     name: "Login",
@@ -72,6 +74,8 @@
                 let user = {username:this.user.username,id:this.user.uuid};
                 this.$store.dispatch('saveUserInfo',user)
                 this.$router.replace('/info');
+                //登陆成功后将权限信息保存
+                this.getAllPerms();
               } else {
                 this.requireCaptcha();
                 this.$message.error(res.msg);
@@ -84,6 +88,16 @@
         //请求验证码
         this.user.uuid= getUUID();
         this.captchaPath = getCaptchaPath(this.user.uuid);
+      },
+      getAllPerms(){
+        getAllPerms().then(res => {
+          if (res.code === 200) {
+            //将权限信息进行缓存
+            sessionStorage.setItem('permissions', res.datas);
+          }
+        }).catch(err => {
+          router.push('/login')
+        })
       }
     }
 
