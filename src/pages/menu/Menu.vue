@@ -1,7 +1,7 @@
 <template>
   <div class="menu-area">
     <div class="add-form">
-      <el-button type="primary" @click="addOrUpdate()" v-if="Auth('menu:add')">添加</el-button>
+      <el-button type="primary" @click="addOrUpdate(null,'add')" v-if="Auth('menu:add')">添加</el-button>
     </div>
     <div class="container-table">
       <!--菜单列表-->

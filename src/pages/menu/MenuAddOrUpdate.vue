@@ -6,7 +6,7 @@
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="addMenu"
              label-width="80px" size="medium">
 
-      <el-form-item label="类型" prop="typeName">
+      <el-form-item label="类型">
         <el-select v-model="dataForm.type" :disabled="disabled" placeholder="请选择">
           <el-option
             v-for="item in options"
