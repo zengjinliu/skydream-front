@@ -1,7 +1,7 @@
 <template>
   <div class="menu-area">
     <div class="add-form">
-      <el-button type="primary" @click="addOrUpdate()">添加</el-button>
+      <el-button type="primary" @click="addOrUpdate()" v-if="Auth('menu:add')">添加</el-button>
     </div>
     <div class="container-table">
       <!--菜单列表-->
@@ -30,9 +30,9 @@
         <el-table-column prop="perms" header-align="center" align="center" width="150" :show-overflow-tooltip="true" label="授权标识"></el-table-column>
         <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="addOrUpdate(scope.row.menuId,'add')">添加</el-button>
-            <el-button type="text" size="small" @click="addOrUpdate(scope.row.menuId,'edit')">修改</el-button>
-            <el-button type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
+            <el-button type="text" size="small" @click="addOrUpdate(scope.row.menuId,'add')" v-if="Auth('menu:add')">添加</el-button>
+            <el-button type="text" size="small" @click="addOrUpdate(scope.row.menuId,'edit')" v-if="Auth('menu:edit')">修改</el-button>
+            <el-button type="text" size="small" @click="deleteHandle(scope.row.menuId)" v-if="Auth('menu:del')">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

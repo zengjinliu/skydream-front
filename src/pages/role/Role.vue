@@ -7,8 +7,8 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="doSearch">查询</el-button>
-          <el-button type="success" @click="addOrUpdate()">添加</el-button>
-          <el-button type="danger" @click="del()" :disabled="roleIds.length <=0">批量删除</el-button>
+          <el-button type="success" @click="addOrUpdate()" v-if="Auth('role:add')">添加</el-button>
+          <el-button type="danger" @click="del()" :disabled="roleIds.length <=0" v-if="Auth('role:del')">批量删除</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -32,8 +32,8 @@
           width="150"
           label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="addOrUpdate(scope.row.roleId)">修改</el-button>
-            <el-button type="text" size="small" @click="del(scope.row.roleId)">删除</el-button>
+            <el-button type="text" size="small" @click="addOrUpdate(scope.row.roleId)" v-if="Auth('role:edit')">修改</el-button>
+            <el-button type="text" size="small" @click="del(scope.row.roleId)" v-if="Auth('role:del')">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
