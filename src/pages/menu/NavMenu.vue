@@ -1,7 +1,7 @@
 <template>
   <el-submenu
     v-if="menu.childs && menu.childs.length >= 1"
-    :index="menu.url"
+    :index="menu.menuId"
     >
     <template slot="title">
       <i :class="menu.icon"></i>
@@ -14,7 +14,7 @@
       >
     </nav-menu>
   </el-submenu>
-  <el-menu-item v-else :index="menu.url">
+  <el-menu-item v-else :index="menu.menuId" @click="goRouterHandler(menu.url)">
     <i :class="menu.icon"></i>
     <span>{{ menu.name }}</span>
   </el-menu-item>
@@ -38,7 +38,13 @@
     },
     created() {
     },
-    methods: {}
+    methods: {
+      goRouterHandler(url){
+        //不使用router属性，会以index作为路由路径，故在次添加点击事件，跳转到指定路由
+        this.$router.push(url);
+      }
+
+    }
   }
 </script>
 

@@ -7,7 +7,6 @@
       background-color="#334256"
       text-color="#ffffff"
       active-text-color="#20a0ff"
-      router
     >
       <el-menu-item index="info" @click="$router.push('/info')">
         <i class="el-icon-house"></i>
@@ -33,7 +32,6 @@
     data() {
       return {
         collapse: false,
-        menuActiveName: '系统管理',
         items: []
       }
     },

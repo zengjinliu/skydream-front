@@ -60,6 +60,7 @@
           type: '0',//默然是目录
           icon: '',
           orderNum: '',
+
         },
         dataRule: {
           name: [
@@ -79,15 +80,14 @@
           value: '2',
           label: '按钮'
         }],
-        iconList: [],
         visible: false,
         opt:'',//操作（是新增还是修改）
         disabled: false,
+        iconList: [],//图标列表
       }
     },
     created() {
-      //获取矢量图标 TODO
-
+     //TOOD 菜单图标待完成
     },
     methods: {
       init(menuId,opt) {
@@ -160,7 +160,10 @@
           })
         }
       },
-
+      iconActiveHandle (iconName) {
+        //图标选中
+        this.dataForm.icon = iconName
+      },
 
     }
   }

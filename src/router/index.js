@@ -3,6 +3,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 
+//解决路由到同一个地址报错问题
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error=> error)
+}
 //声明使用插件
 Vue.use(VueRouter)
 
