@@ -2,27 +2,59 @@
   <div class="login-wrap">
     <div class="login-title">skydream team</div>
     <div class="main-login">
-      <el-form :model="user" :rules="rules" ref="loginForm" @keyup.enter.native="login()" status-icon>
-        <el-form-item prop="username">
-          <el-input v-model="user.username" placeholder="用户名"></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input v-model="user.password" type="password" placeholder="密码"></el-input>
-        </el-form-item>
-        <el-form-item prop="captcha">
-          <el-row :gutter="20">
-            <el-col :span="14">
-              <el-input v-model="user.captcha" placeholder="验证码"></el-input>
-            </el-col>
-            <el-col :span="10" class="login-captcha">
-              <img :src="captchaPath" @click="requireCaptcha()" alt="">
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item>
-          <el-button class="login-btn-submit" type="primary" @click="login()">登录</el-button>
-        </el-form-item>
-      </el-form>
+      <div class="login-type">
+        <span class="pwd-login" :class="{blue:!loginType}" @click="handlePwd">密码登录</span>
+        <span class="msg-login" :class="{blue:loginType}" @click="handleMsg">短信登录</span>
+      </div>
+      <div class="login-area">
+        <el-form :model="user" v-show="!loginType" :rules="rules" ref="loginForm" @keyup.enter.native="login()"
+                 status-icon>
+          <el-form-item prop="username">
+            <el-input v-model="user.username" placeholder="用户名"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="user.password" type="password" placeholder="密码"></el-input>
+          </el-form-item>
+          <el-form-item prop="captcha">
+            <el-row :gutter="20">
+              <el-col :span="14">
+                <el-input v-model="user.captcha" placeholder="验证码"></el-input>
+              </el-col>
+              <el-col :span="10" class="login-captcha">
+                <img :src="captchaPath" @click="requireCaptcha()" alt="">
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item>
+            <el-button class="login-btn-submit" type="primary" @click="login()">登录</el-button>
+          </el-form-item>
+        </el-form>
+
+        <el-form :model="msgUser" v-show="loginType" :rules="msgLoginRule" ref="msgLoginForm"
+                 @keyup.enter.native="msgLogin()"
+                 status-icon>
+          <el-form-item prop="phone">
+
+            <el-input  v-model="msgUser.phone" placeholder="填写常用手机号" class="phone-input"></el-input>
+            <el-button
+              type="text"
+              class="msg-btn"
+              :disabled="msgBtn"
+              @click="requiredMsgCode"
+              >
+              {{btnValue}}
+            </el-button>
+          </el-form-item>
+          <el-form-item prop="msgCode">
+            <el-input v-model="msgUser.msgCode" placeholder="验证码"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button class="login-btn-submit" type="primary" @click="msgLogin()">登录</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+
     </div>
   </div>
 
@@ -30,7 +62,7 @@
 </template>
 
 <script>
-  import {doLogin,getCaptchaPath,getUUID} from "../../api/login";
+  import {doLogin, getCaptchaPath, getUUID,requireMsgCode,msgLogin} from "../../api/login";
   import {getAllPerms} from "../../api/user";
   import router from "../../router";
 
@@ -44,6 +76,10 @@
           captcha: '',
           uuid:''
         },
+        msgUser: {
+          phone: '',
+          msgCode: ''
+        },
         rules: {
           username: [
             {required: true, message: '用户名不能为空', trigger: 'blur'}
@@ -55,7 +91,15 @@
             {required: true, message: '验证码不能为空', trigger: 'blur'}
           ]
         },
+        msgLoginRule: {
+          phone: [
+            {required: true, message: '请填写手机号', trigger: 'blur'},
+          ]
+        },
         captchaPath: '',//图片验证码
+        loginType: false,
+        msgBtn: false,
+        btnValue: '获取验证码',
       }
 
     },
@@ -84,12 +128,12 @@
           }
         });
       },
-      requireCaptcha(){
+      requireCaptcha() {
         //请求验证码
-        this.user.uuid= getUUID();
+        this.user.uuid = getUUID();
         this.captchaPath = getCaptchaPath(this.user.uuid);
       },
-      getAllPerms(){
+      getAllPerms() {
         getAllPerms().then(res => {
           if (res.code === 200) {
             //将权限信息进行缓存
@@ -98,7 +142,69 @@
         }).catch(err => {
           router.push('/login')
         })
-      }
+      },
+      handlePwd() {
+        this.loginType = false;
+        this.requireCaptcha();
+      },
+      handleMsg() {
+        this.loginType = true;
+      },
+      requiredMsgCode() {
+        //1.给指定手机号码发送验证码
+        this.$refs['msgLoginForm'].validate((valid) =>{
+          if(valid){
+            requireMsgCode(this.msgUser).then(res =>{
+              if(res.code!=200){
+                this.$message.error(res.msg)
+              }
+            }).catch(err =>{});
+            //2.倒计时功能
+            this.timeoutChangeStyle()
+          }
+        })
+      },
+      timeoutChangeStyle(){
+        //倒计时60秒获取验证码
+        this.msgBtn = true;//禁用发送验证码按钮
+        let num =60;
+        let timer = window.setInterval(() =>{
+          if(num===0){
+            this.btnValue = '获取验证码';
+            num = 60;
+            this.msgBtn = false;
+            clearInterval(timer)
+          }else {
+            this.btnValue = num + 's后再次发送';
+            num--;
+          }
+        },1000)
+      },
+      msgLogin() {
+        //短信登录
+        this.$refs['msgLoginForm'].validate((valid) => {
+          if (valid) {
+            //登录
+            if(this.msgUser.msgCode==''){
+              this.$message.error('填写短信验证码');
+              return false;
+            } else {
+              msgLogin(this.msgUser).then(res =>{
+                if(res.code==200){
+                  this.$cookie.set('token', res.datas.token);
+                  let user = {username: res.datas.username, id: res.datas.userId};
+                  this.$store.dispatch('saveUserInfo', user)
+                  this.$router.replace('/info');
+                  //登陆成功后将权限信息保存
+                  this.getAllPerms();
+                }else {
+                  this.$message.error(res.msg);
+                }
+              })
+            }
+          }
+        });
+      },
     }
 
   }
@@ -118,7 +224,7 @@
 
   .login-title {
     position: absolute;
-    top: 50%;
+    top: 45%;
     width: 100%;
     margin-top: -230px;
     text-align: center;
@@ -130,9 +236,8 @@
   .main-login {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 45%;
     width: 300px;
-    height: 160px;
     margin-left: -190px;
     margin-top: -150px;
     padding: 40px;
@@ -151,5 +256,42 @@
 
   .login-btn-submit {
     width: 100%;
+  }
+
+  .login-type {
+    padding-bottom: 5px;
+    margin-top: -20px;
+  }
+
+  .msg-login {
+    margin-left: 55%;
+    cursor: pointer;
+  }
+
+  .login-area {
+    padding-top: 5px;
+  }
+
+  .pwd-login {
+    cursor: pointer;
+  }
+
+  .blue {
+    color: blue;
+    cursor: pointer;
+  }
+
+  .phone-input {
+    border-radius: 0px;
+    width: 100%;
+    height: 30px;
+  }
+
+  .msg-btn {
+    text-align: center;
+    border-radius: 2px;
+    position: absolute;
+    right:5px;
+    top: 2px;
   }
 </style>

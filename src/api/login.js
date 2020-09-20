@@ -20,11 +20,15 @@ export const doLogin = (params) => ajax(`/login`, params, 'POST');
 export function getCaptchaPath(uuid) {
   return url+ "/captcha?uuid=" + uuid;
 }
-//退出登录
+//3.退出登录
 export const doLogout = () => ajax(`/logout`);
-
-//修改密码
+//4.修改密码
 export const updatePwd = (params) => ajax(`/user/updatePwd`,params,'POST')
+//5.请求验证码
+export const requireMsgCode = (params) => ajax(`/msg/requireCode`,params,'POST')
+//6.短信验证码登录
+export const msgLogin = (params) => ajax(`/msg/login`,params,'POST');
+
 
 
 
