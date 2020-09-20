@@ -35,13 +35,13 @@
                  status-icon>
           <el-form-item prop="phone">
 
-            <el-input  v-model="msgUser.phone" placeholder="填写常用手机号" class="phone-input"></el-input>
+            <el-input v-model="msgUser.phone" placeholder="填写常用手机号" class="phone-input"></el-input>
             <el-button
               type="text"
               class="msg-btn"
               :disabled="msgBtn"
               @click="requiredMsgCode"
-              >
+            >
               {{btnValue}}
             </el-button>
           </el-form-item>
@@ -53,8 +53,18 @@
           </el-form-item>
         </el-form>
       </div>
-
-
+    </div>
+    <!--第三方登录-->
+    <div class="third-party-login" :class="{adjust:loginType}">
+      <a href="#">
+        <img src="../../assert/img/qq.png">
+      </a>
+      <a href="#">
+        <img src="../../assert/img/wechat.png">
+      </a>
+      <a :href="`https://api.weibo.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`">
+        <img src="../../assert/img/weibo.png"  @click="handlerThird">
+      </a>
     </div>
   </div>
 
@@ -62,7 +72,7 @@
 </template>
 
 <script>
-  import {doLogin, getCaptchaPath, getUUID,requireMsgCode,msgLogin} from "../../api/login";
+  import {doLogin, getCaptchaPath, getUUID, requireMsgCode, msgLogin,requireAccessToken} from "../../api/login";
   import {getAllPerms} from "../../api/user";
   import router from "../../router";
 
@@ -74,7 +84,7 @@
           username: '',
           password: '',
           captcha: '',
-          uuid:''
+          uuid: ''
         },
         msgUser: {
           phone: '',
@@ -100,6 +110,8 @@
         loginType: false,
         msgBtn: false,
         btnValue: '获取验证码',
+        clientId:'3075657313',//微博appkey
+        redirectUri:'http://skydream.com/skydream/third/weibo/success',//登录成功回调地址
       }
 
     },
@@ -114,9 +126,9 @@
           if (valid) {
             doLogin(this.user).then(res => {
               if (res.code === 200) {
-                this.$cookie.set('token',res.datas);
-                let user = {username:this.user.username,id:this.user.uuid};
-                this.$store.dispatch('saveUserInfo',user)
+                this.$cookie.set('token', res.datas);
+                let user = {username: this.user.username, id: this.user.uuid};
+                this.$store.dispatch('saveUserInfo', user)
                 this.$router.replace('/info');
                 //登陆成功后将权限信息保存
                 this.getAllPerms();
@@ -152,52 +164,53 @@
       },
       requiredMsgCode() {
         //1.给指定手机号码发送验证码
-        this.$refs['msgLoginForm'].validate((valid) =>{
-          if(valid){
-            requireMsgCode(this.msgUser).then(res =>{
-              if(res.code!=200){
+        this.$refs['msgLoginForm'].validate((valid) => {
+          if (valid) {
+            requireMsgCode(this.msgUser).then(res => {
+              if (res.code != 200) {
                 this.$message.error(res.msg)
               }
-            }).catch(err =>{});
+            }).catch(err => {
+            });
             //2.倒计时功能
             this.timeoutChangeStyle()
           }
         })
       },
-      timeoutChangeStyle(){
+      timeoutChangeStyle() {
         //倒计时60秒获取验证码
         this.msgBtn = true;//禁用发送验证码按钮
-        let num =60;
-        let timer = window.setInterval(() =>{
-          if(num===0){
+        let num = 60;
+        let timer = window.setInterval(() => {
+          if (num === 0) {
             this.btnValue = '获取验证码';
             num = 60;
             this.msgBtn = false;
             clearInterval(timer)
-          }else {
+          } else {
             this.btnValue = num + 's后再次发送';
             num--;
           }
-        },1000)
+        }, 1000)
       },
       msgLogin() {
         //短信登录
         this.$refs['msgLoginForm'].validate((valid) => {
           if (valid) {
             //登录
-            if(this.msgUser.msgCode==''){
+            if (this.msgUser.msgCode == '') {
               this.$message.error('填写短信验证码');
               return false;
             } else {
-              msgLogin(this.msgUser).then(res =>{
-                if(res.code==200){
+              msgLogin(this.msgUser).then(res => {
+                if (res.code == 200) {
                   this.$cookie.set('token', res.datas.token);
                   let user = {username: res.datas.username, id: res.datas.userId};
                   this.$store.dispatch('saveUserInfo', user)
                   this.$router.replace('/info');
                   //登陆成功后将权限信息保存
                   this.getAllPerms();
-                }else {
+                } else {
                   //返回错误信息
                   this.$message.error(res.msg);
                 }
@@ -206,6 +219,23 @@
           }
         });
       },
+      handlerThird(){
+        //TODO 回调成功后怎么处理
+
+          // requireAccessToken().then(res =>{
+          //   if(res.datas !=null){
+          //     console.log(res);
+          //     this.$cookie.set('token', res.datas.token);
+          //     let user = {username: res.datas.username, id: res.datas.userId};
+          //     this.$store.dispatch('saveUserInfo', user)
+          //     this.$router.replace('/info');
+          //     //登陆成功后将权限信息保存
+          //     this.getAllPerms();
+          //     clearInterval(timer);
+          //   }
+          // })
+
+      }
     }
 
   }
@@ -292,7 +322,27 @@
     text-align: center;
     border-radius: 2px;
     position: absolute;
-    right:5px;
+    right: 5px;
     top: 2px;
+  }
+
+  .third-party-login {
+    position: absolute;
+    display: flex;
+    left: 40%;
+    top: 55%;
+    margin-left: 30px;
+  }
+
+  .third-party-login img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .adjust {
+    top: 49%;
   }
 </style>

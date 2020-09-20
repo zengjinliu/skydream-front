@@ -11,9 +11,9 @@ import Vue from 'vue'
 import VueRouter from '../router'
 
 //请求地址
-export const url = 'http://localhost:8081/skydream';
+export const url = 'http://localhost:80/skydream';
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:8081/skydream';
+axios.defaults.baseURL = 'http://localhost:80/skydream';
 
 /**
  * 请求拦截

@@ -28,6 +28,10 @@ export const updatePwd = (params) => ajax(`/user/updatePwd`,params,'POST')
 export const requireMsgCode = (params) => ajax(`/msg/requireCode`,params,'POST')
 //6.短信验证码登录
 export const msgLogin = (params) => ajax(`/msg/login`,params,'POST');
+//7.获取第三方登录的结果也就是accessToken，采用定时器获取获取
+export const requireAccessToken = () =>ajax(`/third/require`)
+
+
 
 
 
