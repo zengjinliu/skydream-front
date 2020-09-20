@@ -198,6 +198,7 @@
                   //登陆成功后将权限信息保存
                   this.getAllPerms();
                 }else {
+                  //返回错误信息
                   this.$message.error(res.msg);
                 }
               })
