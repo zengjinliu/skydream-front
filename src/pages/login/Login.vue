@@ -75,7 +75,6 @@
   import {doLogin, getCaptchaPath, getUUID, requireMsgCode, msgLogin,requireAccessToken} from "../../api/login";
   import {getAllPerms} from "../../api/user";
   import router from "../../router";
-
   export default {
     name: "Login",
     data() {
@@ -221,20 +220,22 @@
       },
       handlerThird(){
         //TODO 回调成功后怎么处理
-
-          // requireAccessToken().then(res =>{
-          //   if(res.datas !=null){
-          //     console.log(res);
-          //     this.$cookie.set('token', res.datas.token);
-          //     let user = {username: res.datas.username, id: res.datas.userId};
-          //     this.$store.dispatch('saveUserInfo', user)
-          //     this.$router.replace('/info');
-          //     //登陆成功后将权限信息保存
-          //     this.getAllPerms();
-          //     clearInterval(timer);
-          //   }
-          // })
-
+      // `https://api.weibo.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}
+        let time = 3;
+        let timer = setInterval(() =>{
+          if(time == 0){
+            clearInterval(timer);
+          } else {
+            //请求后台数据
+            requireAccessToken().then(res =>{
+              if(res.datas){
+                console.log(res);
+                clearInterval(timer)
+              }
+            })
+            time--;
+          }
+        },1000)
       }
     }
 
