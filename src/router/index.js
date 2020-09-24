@@ -48,6 +48,10 @@ const routes = [
 
     ]
   },
+  {
+    path:'/third/login/redirect',
+    component: resolve => require(['../pages/common/ThirdLoginRedirect'],resolve),
+  }
 ];
 
 const router = new VueRouter({

@@ -30,7 +30,7 @@
           </el-form-item>
         </el-form>
 
-        <el-form :model="msgUser" v-show="loginType" :rules="msgLoginRule" ref="msgLoginForm" class="msg-login-form"
+        <el-form :model="msgUser" v-show="loginType" :rules="msgLoginRule" ref="msgLoginForm"
                  @keyup.enter.native="msgLogin()"
                  status-icon>
           <el-form-item prop="phone">
@@ -46,7 +46,7 @@
             </el-button>
           </el-form-item>
           <el-form-item prop="msgCode">
-            <el-input v-model="msgUser.msgCode" placeholder="验证码" class="msg-input"></el-input>
+            <el-input v-model="msgUser.msgCode" placeholder="验证码"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button class="login-btn-submit" type="primary" @click="msgLogin()">登录</el-button>
@@ -54,25 +54,20 @@
         </el-form>
       </div>
       <!--第三方登录-->
-      <div class="third-party-login" :class="{adjust:loginType}">
-        <a href="#">
-          <img src="../../assert/img/qq.png">
-        </a>
-        <a href="#">
-          <img src="../../assert/img/wechat.png">
-        </a>
-        <a :href="`https://api.weibo.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`">
-          <img src="../../assert/img/weibo.png"  @click="handlerThird">
-        </a>
+      <div class="third-party-login">
+        <img src="../../assert/img/qq.png">
+        <img src="../../assert/img/wechat.png">
+        <img src="../../assert/img/weibo.png"  @click="handlerThird">
       </div>
     </div>
+
   </div>
 
 
 </template>
 
 <script>
-  import {doLogin, getCaptchaPath, getUUID, requireMsgCode, msgLogin,requireAccessToken} from "../../api/login";
+  import {doLogin, getCaptchaPath, getUUID, requireMsgCode, msgLogin} from "../../api/login";
   import {getAllPerms} from "../../api/user";
   import router from "../../router";
   export default {
@@ -220,22 +215,7 @@
       },
       handlerThird(){
         //TODO 回调成功后怎么处理
-      // `https://api.weibo.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}
-        let time = 3;
-        let timer = setInterval(() =>{
-          if(time == 0){
-            clearInterval(timer);
-          } else {
-            //请求后台数据
-            requireAccessToken().then(res =>{
-              if(res.datas){
-                console.log(res);
-                clearInterval(timer)
-              }
-            })
-            time--;
-          }
-        },1000)
+        window.location.href='https://api.weibo.com/oauth2/authorize?client_id=3075657313&response_type=code&redirect_uri=http://skydream.com/skydream/third/weibo/success'
       }
     }
 
@@ -245,21 +225,20 @@
 <style>
   .login-wrap {
     background: url("../../assert/img/login_bg.jpg") fixed center;
-    /*background: #142a63;*/
-    width: 100%;
-    height: 100vh;
-    position: absolute;
+    background-color: rgba(38, 50, 56, .6);
     overflow: hidden;
-    margin: 0 auto;
+    position: absolute;
     top: 0;
-    left: 0;
     right: 0;
     bottom: 0;
+    left: 0;
   }
 
   .login-title {
+    position: absolute;
+    top: 45%;
     width: 100%;
-    margin-top: 50px;
+    margin-top: -230px;
     text-align: center;
     font-size: 30px;
     font-weight: 600;
@@ -267,13 +246,12 @@
   }
 
   .main-login {
-    position:absolute;
-    left:0;
-    right:0;
-    top:20%;
-    margin:auto;
+    position: absolute;
+    left: 50%;
+    top: 45%;
     width: 300px;
-    height: 230px;
+    margin-left: -190px;
+    margin-top: -150px;
     padding: 40px;
     border-radius: 5px;
     background: #ffffff;
@@ -293,48 +271,46 @@
   }
 
   .login-type {
+    padding-bottom: 5px;
     margin-top: -20px;
-    margin-bottom: 10%;
   }
 
   .msg-login {
-    float: right;
-    margin-right: 10%;
+    margin-left: 55%;
+    cursor: pointer;
   }
 
   .login-area {
     padding-top: 5px;
-    margin-bottom: -13px;
   }
-
 
   .pwd-login {
     cursor: pointer;
-    float: left;
-    margin-left: 10%;
   }
 
   .blue {
-    color: #409EFF;
+    color: blue;
     cursor: pointer;
   }
 
   .phone-input {
     border-radius: 0px;
     width: 100%;
-    margin-top: 18px;
     height: 30px;
   }
 
   .msg-btn {
-    float: left;
-    margin-left: 1%;
+    text-align: center;
+    border-radius: 2px;
+    position: absolute;
+    right: 5px;
+    top: 2px;
   }
 
   .third-party-login {
-    display: flex;
-    margin-left: 80px;
-    margin-bottom: 20px;
+    position: absolute;
+    margin-top: -10px;
+    margin-left: -10px;
   }
 
   .third-party-login img {
@@ -343,9 +319,5 @@
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
-  }
-
-  .adjust {
-    top: 49%;
   }
 </style>
