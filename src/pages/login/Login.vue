@@ -46,7 +46,7 @@
             </el-button>
           </el-form-item>
           <el-form-item prop="msgCode">
-            <el-input v-model="msgUser.msgCode" placeholder="验证码" class="msg-input"></el-input>
+            <el-input v-model="msgUser.msgCode" placeholder="验证码"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button class="login-btn-submit" type="primary" @click="msgLogin()">登录</el-button>
@@ -247,7 +247,6 @@
     background: url("../../assert/img/login_bg.jpg") fixed center;
     /*background: #142a63;*/
     width: 100%;
-    height: 100vh;
     position: absolute;
     overflow: hidden;
     margin: 0 auto;
@@ -273,8 +272,7 @@
     top:20%;
     margin:auto;
     width: 300px;
-    height: 230px;
-    padding: 40px;
+    padding: 40px 40px 20px 40px;
     border-radius: 5px;
     background: #ffffff;
   }
@@ -320,21 +318,20 @@
   }
 
   .phone-input {
-    border-radius: 0px;
+    border-radius: 0;
     width: 100%;
-    margin-top: 18px;
     height: 30px;
   }
 
   .msg-btn {
-    float: left;
-    margin-left: 1%;
+    position: absolute;
+    left: 65%;
+    top: 5%;
   }
 
   .third-party-login {
     display: flex;
-    margin-left: 80px;
-    margin-bottom: 20px;
+
   }
 
   .third-party-login img {
@@ -343,9 +340,5 @@
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
-  }
-
-  .adjust {
-    top: 49%;
   }
 </style>
