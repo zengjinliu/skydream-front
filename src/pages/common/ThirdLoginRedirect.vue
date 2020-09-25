@@ -14,7 +14,6 @@
       }
     },
     mounted () {
-      console.log('----------->');
       // 这是element-ui中的组件
       const loading = this.$loading({
         lock: true,
@@ -28,7 +27,6 @@
     methods: {
       saveInfo () {
         let info = JSON.parse(this.res)
-        console.log(info);
         // 跳转到登录前的页面或主页
         this.$cookie.set('token', info.token);
         let user = {username: info.username, id: info.userId};

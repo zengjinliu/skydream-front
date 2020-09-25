@@ -62,7 +62,7 @@
           <img src="../../assert/img/wechat.png">
         </a>
         <a :href="`https://api.weibo.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`">
-          <img src="../../assert/img/weibo.png"  @click="handlerThird">
+          <img src="../../assert/img/weibo.png">
         </a>
       </div>
     </div>
@@ -220,23 +220,6 @@
           }
         });
       },
-      handlerThird(){
-        //TODO 回调成功后怎么处理
-
-        // requireAccessToken().then(res =>{
-        //   if(res.datas !=null){
-        //     console.log(res);
-        //     this.$cookie.set('token', res.datas.token);
-        //     let user = {username: res.datas.username, id: res.datas.userId};
-        //     this.$store.dispatch('saveUserInfo', user)
-        //     this.$router.replace('/info');
-        //     //登陆成功后将权限信息保存
-        //     this.getAllPerms();
-        //     clearInterval(timer);
-        //   }
-        // })
-
-      }
     }
 
   }
@@ -298,6 +281,7 @@
   .msg-login {
     float: right;
     margin-right: 10%;
+    cursor: pointer;
   }
 
   .login-area {
