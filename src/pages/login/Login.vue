@@ -255,7 +255,7 @@
     top:20%;
     margin:auto;
     width: 300px;
-    padding: 40px 40px 20px 40px;
+    padding: 40px 40px 10px 40px;
     border-radius: 5px;
     background: #ffffff;
   }

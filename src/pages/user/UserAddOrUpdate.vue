@@ -131,6 +131,7 @@
         }
       },
       doAddUser(){
+        //TODO 准备图片上传和下载采用阿里oss对象存储
         if(this.userForm.userId){
           //修改
           this.$refs['userForm'].validate((valid) =>{
