@@ -45,6 +45,10 @@ let routes = [
         path: '/menu',
         component: resolve => require(['../pages/menu/Menu'], resolve),
       },
+      {
+        path: '/echart',
+        component: resolve => require(['../pages/echarts/EchartDemo'], resolve),
+      },
 
     ]
   },

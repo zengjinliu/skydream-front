@@ -21,7 +21,7 @@
         <el-input v-model="userForm.phone"></el-input>
       </el-form-item>
       <el-form-item label="头像" prop="pic">
-        <el-input v-model="userForm.pic"></el-input>
+        <single-upload v-model="userForm.pic"></single-upload>
       </el-form-item>
       <el-form-item label="角色" prop="roleIds">
         <el-select v-model="userForm.roleIds" placeholder="请选择"
@@ -46,9 +46,13 @@
 <script>
   import {checkNameExist,add,update,queryUserById} from "../../api/user";
   import {getAllRoles} from "../../api/role";
+  import SingleUpload from "../upload/SingleUpload";
 
   export default {
     name: "UserAddOrUpdate",
+    components:{
+      SingleUpload
+    },
     data() {
       let checkName = (rule, value, callback) => {
         if(this.userForm.userId){

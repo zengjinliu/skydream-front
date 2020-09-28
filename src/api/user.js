@@ -15,3 +15,5 @@ export const update = (param) => ajax(`/user/update`, param, 'POST');
 export const queryUserById = (userId) => ajax(`/user/queryById`, {userId});
 //7.获取当期用户的权限
 export const getAllPerms = () => ajax(`/user/queryAllPerms`);
+//请求oss签名
+export const getSingature = () => ajax(`/oss/policy`);

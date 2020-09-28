@@ -14,7 +14,7 @@
     </div>
     <div class="header-right">
       <div class="user-avator">
-        <img src="../../assert/img/jay.png">
+        <img :src="pic">
       </div>
       <el-dropdown class="user-name">
         <span class="el-dropdown-link">
@@ -44,7 +44,7 @@
       return {
         collapse: false,
         fullScreen: false,
-        modifyPwd: false
+        modifyPwd: false,
       }
 
     },
@@ -58,6 +58,9 @@
     computed: {
       username() {
         return this.$store.state.user.username;
+      },
+      pic() {
+        return this.$store.state.user.pic;
       }
     },
     methods: {
