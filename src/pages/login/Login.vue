@@ -118,7 +118,7 @@
     },
     created() {
       //获取验证码
-      this.requireCaptcha();
+      this.requireCaptcha(); 
     },
     methods: {
       login() {
