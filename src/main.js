@@ -9,13 +9,16 @@ import VueCookie from 'vue-cookie'
 import store from './store/index'
 import Bus from '../src/api/bus'
 import {Auth} from './api/auth'
+import Echart from 'echarts'
 
 //全局挂载
 Vue.prototype.Auth = Auth;
+Vue.prototype.$echarts = Echart;
 
 Vue.use(ElementUI,{ size: 'small', zIndex: 3000 })
 Vue.use(VueCookie)
 Vue.use(Bus);
+
 
 
 new Vue({

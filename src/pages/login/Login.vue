@@ -126,9 +126,11 @@
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
             doLogin(this.user).then(res => {
-              if (res.code === 200) {
-                this.$cookie.set('token', res.datas);
-                let user = {username: this.user.username, id: this.user.uuid};
+              if (res.code === 200) { 
+                this.$cookie.set('token', res.datas.token);
+                let user = {username: res.datas.username, 
+                            id: res.datas.userId,
+                            pic: res.datas.pic};
                 this.$store.dispatch('saveUserInfo', user)
                 this.$router.replace('/info');
                 //登陆成功后将权限信息保存
