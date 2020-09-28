@@ -18,5 +18,9 @@ module.exports = {
     source: 'src',
     img: 'src',
     image: 'xlink:href'
+  },
+  chainWebpack: config => {
+    config.resolve.alias
+      .set('@views', resolve('src/pages'))
   }
 }

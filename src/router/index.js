@@ -6,7 +6,7 @@ import VueRouter from 'vue-router'
 //声明使用插件
 Vue.use(VueRouter)
 
-const routes = [
+let routes = [
   {
     path: '/',
     redirect: '/login'
@@ -53,6 +53,19 @@ const routes = [
     component: resolve => require(['../pages/common/ThirdLoginRedirect'],resolve),
   }
 ];
+
+
+
+const files = require.context('@views', true, /router\.js$/);
+
+routes.push({
+  path: '/',
+  redirect: '/home'
+});
+
+files.keys().forEach(key => {
+  routes = routes.concat(files(key).default);
+});
 
 const router = new VueRouter({
   routes: routes,

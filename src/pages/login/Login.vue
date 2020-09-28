@@ -64,7 +64,12 @@
         <a :href="`https://api.weibo.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`">
           <img src="../../assert/img/weibo.png">
         </a>
+        <div class="register-link">
+          <i class="el-icon-user-solid register-icon"></i>
+          <el-link type="primary" :underline="false" @click="register">立即注册</el-link>
+        </div>
       </div>
+
     </div>
 
   </div>
@@ -220,6 +225,10 @@
           }
         });
       },
+      //注册
+      register() {
+        this.$router.push({name:'register'})
+      }
     }
 
   }
@@ -281,6 +290,7 @@
   .msg-login {
     float: right;
     margin-right: 10%;
+    font-weight: bold;
     cursor: pointer;
   }
 
@@ -294,6 +304,7 @@
     cursor: pointer;
     float: left;
     margin-left: 10%;
+    font-weight: bold;
   }
 
   .blue {
@@ -324,5 +335,19 @@
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
+  }
+
+  .register-icon {
+    color: #409EFF;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+  }
+
+  .register-link {
+    float: right;
+    display: inline-block;
+    margin-left: 63px;
+    margin-top: 12px;
   }
 </style>
