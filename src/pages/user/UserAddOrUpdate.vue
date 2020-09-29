@@ -45,8 +45,8 @@
 
 <script>
   import {checkNameExist,add,update,queryUserById} from "../../api/user";
-  import {getAllRoles} from "../../api/role";
-  import SingleUpload from "../upload/SingleUpload";
+  import {getAllRoles} from "@/api/role";
+  import SingleUpload from "@views/upload/SingleUpload";
 
   export default {
     name: "UserAddOrUpdate",

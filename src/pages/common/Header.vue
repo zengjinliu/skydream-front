@@ -35,8 +35,8 @@
 <script>
   import UpdatePassword from "./UpdatePassword";
 
-  import {doLogout} from "../../api/login";
-  import {clearLoginInfo} from "../../api/ajax";
+  import {doLogout} from "@/api/login";
+  import {clearLoginInfo} from "@/api/ajax";
 
   export default {
     name: "Header",

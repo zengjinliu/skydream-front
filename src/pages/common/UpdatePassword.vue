@@ -28,9 +28,9 @@
 
 <script>
 
-  import {updatePwd} from "../../api/login";
-  import {clearLoginInfo} from "../../api/ajax";
-  import {doLogout} from "../../api/login";
+  import {updatePwd} from "@/api/login";
+  import {clearLoginInfo} from "@/api/ajax";
+  import {doLogout} from "@/api/login";
 
   export default {
     name: "UpdatePassword",

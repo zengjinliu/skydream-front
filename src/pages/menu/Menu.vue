@@ -45,7 +45,7 @@
 
   import MenuAddOrUpdate from "./MenuAddOrUpdate";
 
-  import {getTreeMenu,deleteMenu} from "../../api/menu";
+  import {getTreeMenu,deleteMenu} from "@/api/menu";
 
   export default {
     name: "Menu",

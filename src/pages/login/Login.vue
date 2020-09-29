@@ -79,8 +79,8 @@
 
 <script>
   import {doLogin, getCaptchaPath, getUUID, requireMsgCode, msgLogin,requireAccessToken} from "../../api/login";
-  import {getAllPerms} from "../../api/user";
-  import router from "../../router";
+  import {getAllPerms} from "@/api/user";
+  import router from "@/router";
 
   export default {
     name: "Login",

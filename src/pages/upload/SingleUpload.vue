@@ -20,8 +20,8 @@
   </div>
 </template>
 <script>
-  import {getSingature} from '../../api/user'
-  import {getUUID} from '../../api/login'
+  import {getSingature} from '@/api/user'
+  import {getUUID} from '@/api/login'
   export default {
     name: 'singleUpload',
     props: {

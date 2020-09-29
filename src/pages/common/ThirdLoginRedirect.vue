@@ -3,8 +3,8 @@
 </template>
 
 <script>
-  import {getAllPerms} from "../../api/user";
-  import router from "../../router";
+  import {getAllPerms} from "@/api/user";
+  import router from "@/router";
 
   export default {
     name: 'ThirdLoginRedirect',

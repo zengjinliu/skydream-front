@@ -10,7 +10,7 @@
 
 <script>
   import vHeader from "./Header";
-  import SideBar from "../menu/SideBar";
+  import SideBar from "@views/menu/SideBar";
 
   export default {
     name: "Home",

@@ -13,48 +13,48 @@ let routes = [
   },
   {
     path: '/login',
-    component: resolve => require(['../pages/login/Login'], resolve),
+    component: resolve => require(['@views/login/Login'], resolve),
   },
   {
     path: '/home',
     name: 'home页',
-    component: resolve => require(['../pages/common/Home'], resolve),
+    component: resolve => require(['@views/common/Home'], resolve),
     children: [
       {
         path: '/info',
         name: '后台首页',
-        component: resolve => require(['../pages/login/InfoPage'], resolve),
+        component: resolve => require(['@views/login/InfoPage'], resolve),
       },
       {
         path: '/header',
-        component: resolve => require(['../pages/common/Header'], resolve),
+        component: resolve => require(['@views/common/Header'], resolve),
       },
       {
         path: '/sideBar',
-        component: resolve => require(['../pages/menu/SideBar'], resolve),
+        component: resolve => require(['@views/menu/SideBar'], resolve),
       },
       {
         path: '/user',
-        component: resolve => require(['../pages/user/User'], resolve),
+        component: resolve => require(['@views/user/User'], resolve),
       },
       {
         path: '/role',
-        component: resolve => require(['../pages/role/Role'], resolve),
+        component: resolve => require(['@views/role/Role'], resolve),
       },
       {
         path: '/menu',
-        component: resolve => require(['../pages/menu/Menu'], resolve),
+        component: resolve => require(['@views/menu/Menu'], resolve),
       },
       {
         path: '/echart',
-        component: resolve => require(['../pages/echarts/EchartDemo'], resolve),
+        component: resolve => require(['@views/echarts/EchartDemo'], resolve),
       },
 
     ]
   },
   {
     path:'/third/login/redirect',
-    component: resolve => require(['../pages/common/ThirdLoginRedirect'],resolve),
+    component: resolve => require(['@views/common/ThirdLoginRedirect'],resolve),
   }
 ];
 

@@ -44,7 +44,7 @@
 
 <script>
 
-  import {addMenu,queryById,update} from "../../api/menu";
+  import {addMenu,queryById,update} from "@/api/menu";
 
   export default {
     name: "MenuAddOrUpdate",

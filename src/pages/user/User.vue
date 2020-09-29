@@ -63,7 +63,7 @@
 <script>
   import UserAddOrUpdate from "./UserAddOrUpdate";
 
-  import {getUserPage, delUser} from "../../api/user";
+  import {getUserPage, delUser} from "@/api/user";
 
   export default {
     name: "User",

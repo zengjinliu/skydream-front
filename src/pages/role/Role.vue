@@ -57,7 +57,7 @@
 <script>
   import RoleAddOrUpdate from "./RoleAddOrUpdate";
 
-  import {getRolePage,delRole} from "../../api/role";
+  import {getRolePage,delRole} from "@/api/role";
 
   export default {
     name: "Role",

@@ -41,8 +41,8 @@
 
 <script>
 
-  import {getTreeMenu} from "../../api/menu";
-  import {addRole, queryById, update} from "../../api/role";
+  import {getTreeMenu} from "@/api/menu";
+  import {addRole, queryById, update} from "@/api/role";
 
   export default {
     name: "RoleAddOrUpdate",

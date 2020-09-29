@@ -25,7 +25,7 @@
 <script>
 
   import NavMenu from "./NavMenu";
-  import {getAllMenus} from "../../api/menu";
+  import {getAllMenus} from "@/api/menu";
 
   export default {
     name: "SideBar",
