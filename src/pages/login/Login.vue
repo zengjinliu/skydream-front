@@ -238,7 +238,7 @@
 
 <style>
   .login-wrap {
-    background: url("../../assert/img/login_bg.jpg") fixed center;
+    background: url("~@/assert/img/login_bg.jpg") fixed center;
     /*background: #142a63;*/
     width: 100%;
     position: absolute;
