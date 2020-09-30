@@ -3,6 +3,8 @@
     <div><img src="@/assert/img/album/a.jpg" alt="" /></div>
     <div><img src="@/assert/img/album/b.jpg" alt="" /></div>
     <div><img src="@/assert/img/album/c.jpg" alt="" /></div>
+    <div><img src="@/assert/img/album/d.jpg" alt="" /></div>
+    <div><img src="@/assert/img/album/e.jpg" alt="" /></div>
     <div><img src="@/assert/img/album/f.jpg" alt="" /></div>
     <div><img src="@/assert/img/album/g.jpg" alt="" /></div>
     <div><img src="@/assert/img/album/h.jpg" alt="" /></div>

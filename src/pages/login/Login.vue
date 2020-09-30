@@ -214,7 +214,7 @@
                 if (res.code == 200) {
                   this.$cookie.set('token', res.datas.token);
                   let user = {username: res.datas.username, id: res.datas.userId};
-                  this.$store.dispatch('saveUserInfo', user)
+                  this.$store.commit('USER_INFO', user)
                   this.$router.replace('/info');
                   //登陆成功后将权限信息保存
                   this.getAllPerms();
